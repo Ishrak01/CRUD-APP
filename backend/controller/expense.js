@@ -57,6 +57,7 @@ exports.deleteExpense=async(req,res)=>{
     }
     res.status(200).json({ message: 'Expense deleted' });
   } catch (error) {
+    console.error('Error :', error);
     res.status(500).json({error:err.message})
   }
 }
