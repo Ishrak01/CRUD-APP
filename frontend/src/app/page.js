@@ -8,6 +8,7 @@ const ExpenseTracker = () => {
   const [expenses, setExpenses] = useState([]);
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState('');
+  const [category, setCategory] = useState('');
   
   const [editing, setEditing] = useState(null);
 
@@ -26,11 +27,12 @@ const ExpenseTracker = () => {
 
   const addExpense = async () => {
     try {
-      const newExpense = { title, amount };
+      const newExpense = { title, amount,category };
       const response = await axios.post('http://localhost:5500/createExpense', newExpense);
       setExpenses([...expenses, response.data]);
       setTitle('');
       setAmount('');
+      setCategory('');
   
     } catch (error) {
       console.error('Error adding expense', error);
@@ -39,12 +41,13 @@ const ExpenseTracker = () => {
 
   const updateExpense = async (id) => {
     try {
-      const updatedExpense = { title, amount };
+      const updatedExpense = { title, amount,category };
       await axios.put(`http://localhost:5500/updateExpense/${id}`, updatedExpense);
       setExpenses(expenses.map(expense => (expense.id === id ? { ...updatedExpense, id } : expense)));
       fetchExpenses();
       setTitle('');
       setAmount('');
+      setCategory('');
       
       setEditing(null);
     } catch (error) {
@@ -77,6 +80,7 @@ const ExpenseTracker = () => {
   const startEditing = (expense) => {
     setTitle(expense.title);
     setAmount(expense.amount);
+    setCategory(expense.category);
  
     setEditing(expense._id);
   };
@@ -105,6 +109,16 @@ const ExpenseTracker = () => {
             required
           />
         </div>
+        <div className="mb-2">
+          <label className="block text-gray-700">Category</label>
+          <input
+            type="text"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full px-4 py-2 border rounded-lg"
+            required
+          />
+        </div>
         <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-lg">
           {editing ? 'Update Expense' : 'Add Expense'}
         </button>
@@ -115,6 +129,7 @@ const ExpenseTracker = () => {
             <div>
               <h2 className="text-lg font-bold">{expense.title}</h2>
               <p>{expense.amount} </p>
+              <p>{expense.category}</p>
             </div>
             <div>
               <button onClick={() => startEditing(expense)} className="px-4 py-2 bg-yellow-500 text-white rounded-lg mr-2">

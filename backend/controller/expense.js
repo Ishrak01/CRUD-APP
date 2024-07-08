@@ -2,13 +2,14 @@ const expense=require('../model/expenseModel')
 
 //create an expense
 exports.createExpense=async(req,res)=>{
-  const{title,amount}=req.body
+  const{title,amount,category }=req.body
 
   try {
-    const newExpense=new expense({title,amount})
+    const newExpense=new expense({title,amount,category })
     await newExpense.save()
     res.status(201).json(newExpense)
   } catch (error) {
+    console.error('Error :', error);
     res.status(500).json({error:err.message})
   }
 }
@@ -27,12 +28,12 @@ exports.readExpense=async(req,res)=>{
 //update an expense
 exports.updateExpense=async(req,res)=>{
   const {id}=req.params
-  const {title,amount}=req.body
+  const {title,amount,category }=req.body
 
   try {
     const update=await expense.findByIdAndUpdate(
       id,
-      {title,amount},
+      {title,amount,category },
       {new:true}
     )
 
