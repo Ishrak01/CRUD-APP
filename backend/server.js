@@ -1,9 +1,9 @@
-
 const cors = require('cors');
 const dotenv = require('dotenv');
 const express = require('express');
 
 const expenseRoute=require('./routes/expenseRoute')
+const others=require('./routes/others')
 const morgan = require('morgan');
 
 const connectDB = require('./config/DB.js');
@@ -30,6 +30,7 @@ app.get('/',(req,res)=>{
 })
 
 app.use('/',expenseRoute)
+app.use('/',others)
 
 
 //run server
